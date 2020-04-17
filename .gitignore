@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# data
+*.hdf5
+*.json
+*.zip
+*.mp4
+data
+
+# models
+*.pkl
+
+# folders
+results
+tensorboard
+pretrained_models
+
+# logs
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints*
+
+# garbage
+*.DS_Store

@@ -1,0 +1,110 @@
+model:
+    model_type: "LGI"
+    resume: False 
+    checkpoint_path: ""
+    use_gpu: True
+    ### Video Encoder
+    use_video_encoder: False
+    video_enc_vemb_idim: 500
+    video_enc_vemb_odim: 512 # (=vdim)
+    video_enc_use_position: True
+    video_enc_pemb_idim: 128
+    video_enc_pemb_odim: 512
+    ### Query Encoder
+    query_enc_emb_idim: -1 # == vocabulary size
+    query_enc_emb_odim: 300 # == dim of Glove
+    query_enc_rnn_type: "LSTM"
+    query_enc_rnn_bidirectional: True
+    query_enc_rnn_nlayer: 2
+    query_enc_rnn_idim: -1 # == query_emb_odim
+    query_enc_rnn_hdim: 256 # (=qdim)
+    query_enc_rnn_dropout: 0.5
+    glove_path: ""
+    ### Sequential Query Attention Network (SQAN)
+    num_semantic_entity: 1
+    sqan_qdim: -1 # == qdim 
+    sqan_att_cand_dim: -1 # == qdim
+    sqan_att_key_dim: -1 # == qdim
+    sqan_att_hdim: 256
+    sqan_att_drop_prob: 0.0
+    ### Local-Global Video-Text interactions (LGI)
+    lgi_fusion_method: "mul"
+    lgi_hp_idim_1: -1 # == qdim
+    lgi_hp_idim_2: -1 # == qdim
+    lgi_hp_hdim: -1 # == vdim
+    lgi_local_type: "res_block"
+    lgi_local_res_block_1d_idim: -1 # == vdim
+    lgi_local_res_block_1d_odim: -1 # == vdim
+    lgi_local_res_block_1d_hdim: 256
+    lgi_local_res_block_1d_ksize: 15
+    lgi_local_num_res_blocks: 1
+    lgi_local_do_downsample: False
+    lgi_global_type: "nl"
+    lgi_global_satt_att_n: 1
+    lgi_global_satt_att_cand_dim: -1 # == vdim
+    lgi_global_satt_att_hdim: 256
+    lgi_global_satt_att_use_embedding: True
+    lgi_global_satt_att_edim: 512
+    lgi_global_num_nl_block: 1
+    lgi_global_nl_idim: -1 # == vdim
+    lgi_global_nl_odim: 512
+    lgi_global_nl_nheads: 1
+    lgi_global_nl_use_bias: True
+    lgi_global_nl_drop_prob: 0.0
+    lgi_global_nl_use_local_mask: False
+    ### Temporal Attention based Regression
+    grounding_att_key_dim: -1
+    grounding_att_cand_dim: -1
+    grounding_att_hdim: 256
+    grounding_att_drop_prob: 0.0
+    grounding_idim: -1
+    grounding_hdim: 512
+    ### Criterion
+    use_temporal_attention_guidance_loss: True
+    tag_weight: 1.0
+    use_distinct_query_attention_loss: False
+train_loader:
+    dataset: "anet"
+    split: "train"
+    in_memory: True
+    #in_memory: False
+    batch_size: 100
+    data_dir: "data/ActivityNet"
+    feature_type: "C3D"
+    video_feature_path: "data/ActivityNet/feats/sub_activitynet_v1-3.c3d.hdf5"
+    annotation_path: "data/ActivityNet/captions/annotations/train.json"
+    max_length: 25
+    word_frequency_threshold: 1
+    num_segment: 128
+test_loader:
+    dataset: "anet"
+    split: "test"
+    in_memory: True
+    #in_memory: False
+    batch_size: 100
+    data_dir: "data/ActivityNet"
+    feature_type: "C3D"
+    video_feature_path: "data/ActivityNet/feats/sub_activitynet_v1-3.c3d.hdf5"
+    annotation_path: 
+        - "data/ActivityNet/captions/annotations/val_1.json"
+        - "data/ActivityNet/captions/annotations/val_2.json"
+    max_length: 25
+    word_frequency_threshold: 1
+    num_segment: 128
+optimize:
+    num_step: 300 # epoch
+    optimizer_type: "Adam"
+    init_lr: 0.0004
+    scheduler_type: ""
+    decay_factor: 0.5
+    decay_step: -1
+evaluation:
+    evaluate_after: -1
+    every_eval: 1 
+    print_every: 100
+misc:
+    print_every: 100
+    vis_every: 1
+logging:
+    print_level: "DEBUG"
+    write_level: "INFO"
