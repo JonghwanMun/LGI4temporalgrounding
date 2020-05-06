@@ -56,3 +56,13 @@ def get_filename_from_path(file_path, delimiter="/"):
     """
     filename = file_path.split(delimiter)[-1]
     return filename.split(".")[0]
+
+def timestamp_to_featstamp(timestamp, nfeats, duration):
+    """
+    Function to measure 1D overlap
+    Convert the timestamps to feature indices
+    """
+    start, end = timestamp
+    start = min(int(round(start / duration * nfeats)), nfeats - 1)
+    end = max(int(round(end / duration * nfeats)), start + 1)
+    return start, end
